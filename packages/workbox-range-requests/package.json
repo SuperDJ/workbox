@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": "Google's Web DevRel Team and Google's Aurora Team",
   "description": "This library creates a new Response, given a source Response and a Range header value.",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/googlechrome/workbox.git"

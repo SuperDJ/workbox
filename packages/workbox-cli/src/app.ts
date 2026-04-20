@@ -97,9 +97,9 @@ export const app = async (
         option || constants.defaultConfigFile,
       );
 
-      let configFromDisk:
-        | workboxBuild.GenerateSWOptions
-        | workboxBuild.InjectManifestOptions;
+      let configFromDisk: Promise<
+        workboxBuild.GenerateSWOptions | workboxBuild.InjectManifestOptions
+      >;
       try {
         configFromDisk = readConfig(configPath);
       } catch (error) {
@@ -111,7 +111,7 @@ export const app = async (
 
       logger.log(`Using configuration from ${configPath}.`);
 
-      const config = configFromDisk!;
+      const config = await configFromDisk!;
       // Determine whether we're in --watch mode, or one-off mode.
       if (params?.flags?.watch) {
         const options: WatchOptions = {

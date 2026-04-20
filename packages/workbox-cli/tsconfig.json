@@ -2,10 +2,9 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "esModuleInterop": true,
-    "module": "CommonJS",
     "outDir": "build",
     "rootDir": "src",
-    "target": "ES2018",
+    "target": "ES2020",
     "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },
   "include": ["src/**/*.ts"],

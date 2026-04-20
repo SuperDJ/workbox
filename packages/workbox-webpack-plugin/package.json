@@ -2,6 +2,7 @@
   "name": "workbox-webpack-plugin",
   "version": "7.4.0",
   "description": "A plugin for your Webpack build process, helping you generate a manifest of local files that workbox-sw should precache.",
+  "type": "module",
   "keywords": [
     "workbox",
     "workboxjs",

@@ -20,12 +20,17 @@ function getCDNPrefix() {
   return `${cdn.origin}/${cdn.bucketName}/${cdn.releasesDir}`;
 }
 
-export function getModuleURL(moduleName: string, buildType: BuildType): string {
+export async function getModuleURL(
+  moduleName: string,
+  buildType: BuildType,
+): Promise<string> {
   ok(moduleName, errors['no-module-name']);
 
   if (buildType) {
     // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
-    const pkgJson: WorkboxPackageJSON = require(`${moduleName}/package.json`);
+    const pkgJson: WorkboxPackageJSON = await import(
+      `${moduleName}/package.json`
+    );
     if (buildType === 'dev' && pkgJson.workbox && pkgJson.workbox.prodOnly) {
       // This is not due to a public-facing exception, so just throw an Error(),
       // without creating an entry in errors.js.

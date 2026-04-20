@@ -42,14 +42,16 @@ export class WorkboxConfigError extends Error {
 
 // Some methods need to do follow-up validation using the JSON schema,
 // so return both the validated options and then schema.
-function validate<T>(
+async function validate<T>(
   input: unknown,
   methodName: MethodNames,
-): [T, JSONSchemaType<T>] {
+): Promise<[T, JSONSchemaType<T>]> {
   // Don't mutate input: https://github.com/GoogleChrome/workbox/issues/2158
   const inputCopy = Object.assign({}, input);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const jsonSchema: JSONSchemaType<T> = require(`../schema/${methodName}Options.json`);
+  const jsonSchema: JSONSchemaType<T> = await import(
+    `../schema/${methodName}Options.json`
+  );
   const validate = ajv.compile(jsonSchema);
   if (validate(inputCopy)) {
     // All methods support manifestTransforms, so validate it here.
@@ -162,8 +164,10 @@ function ensureValidStringHandler(
   }
 }
 
-export function validateGenerateSWOptions(input: unknown): GenerateSWOptions {
-  const [validatedOptions, jsonSchema] = validate<GenerateSWOptions>(
+export async function validateGenerateSWOptions(
+  input: unknown,
+): Promise<GenerateSWOptions> {
+  const [validatedOptions, jsonSchema] = await validate<GenerateSWOptions>(
     input,
     'GenerateSW',
   );
@@ -175,16 +179,21 @@ export function validateGenerateSWOptions(input: unknown): GenerateSWOptions {
   return validatedOptions;
 }
 
-export function validateGetManifestOptions(input: unknown): GetManifestOptions {
-  const [validatedOptions] = validate<GetManifestOptions>(input, 'GetManifest');
+export async function validateGetManifestOptions(
+  input: unknown,
+): Promise<GetManifestOptions> {
+  const [validatedOptions] = await validate<GetManifestOptions>(
+    input,
+    'GetManifest',
+  );
 
   return validatedOptions;
 }
 
-export function validateInjectManifestOptions(
+export async function validateInjectManifestOptions(
   input: unknown,
-): InjectManifestOptions {
-  const [validatedOptions] = validate<InjectManifestOptions>(
+): Promise<InjectManifestOptions> {
+  const [validatedOptions] = await validate<InjectManifestOptions>(
     input,
     'InjectManifest',
   );
@@ -194,9 +203,9 @@ export function validateInjectManifestOptions(
 
 // The default `exclude: [/\.map$/, /^manifest.*\.js$/]` value can't be
 // represented in the JSON schema, so manually set it for the webpack options.
-export function validateWebpackGenerateSWOptions(
+export async function validateWebpackGenerateSWOptions(
   input: unknown,
-): WebpackGenerateSWOptions {
+): Promise<WebpackGenerateSWOptions> {
   const inputWithExcludeDefault = Object.assign(
     {
       // Make a copy, as exclude can be mutated when used.
@@ -204,10 +213,11 @@ export function validateWebpackGenerateSWOptions(
     },
     input,
   );
-  const [validatedOptions, jsonSchema] = validate<WebpackGenerateSWOptions>(
-    inputWithExcludeDefault,
-    'WebpackGenerateSW',
-  );
+  const [validatedOptions, jsonSchema] =
+    await validate<WebpackGenerateSWOptions>(
+      inputWithExcludeDefault,
+      'WebpackGenerateSW',
+    );
 
   ensureValidNavigationPreloadConfig(validatedOptions);
   ensureValidCacheExpiration(validatedOptions);
@@ -216,9 +226,9 @@ export function validateWebpackGenerateSWOptions(
   return validatedOptions;
 }
 
-export function validateWebpackInjectManifestOptions(
+export async function validateWebpackInjectManifestOptions(
   input: unknown,
-): WebpackInjectManifestOptions {
+): Promise<WebpackInjectManifestOptions> {
   const inputWithExcludeDefault = Object.assign(
     {
       // Make a copy, as exclude can be mutated when used.
@@ -226,7 +236,7 @@ export function validateWebpackInjectManifestOptions(
     },
     input,
   );
-  const [validatedOptions] = validate<WebpackInjectManifestOptions>(
+  const [validatedOptions] = await validate<WebpackInjectManifestOptions>(
     inputWithExcludeDefault,
     'WebpackInjectManifest',
   );

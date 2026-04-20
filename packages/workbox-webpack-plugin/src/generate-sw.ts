@@ -18,7 +18,7 @@ import {relativeToOutputPath} from './lib/relative-to-output-path';
 
 // webpack v4/v5 compatibility:
 // https://github.com/webpack/webpack/issues/11425#issuecomment-686607633
-const {RawSource} = webpack.sources || require('webpack-sources');
+const {RawSource} = webpack.sources || import('webpack-sources');
 
 // Used to keep track of swDest files written by *any* instance of this plugin.
 // See https://github.com/GoogleChrome/workbox/issues/2181
@@ -173,7 +173,7 @@ class GenerateSW {
       // emit might be called multiple times; instead of modifying this.config,
       // use a validated copy.
       // See https://github.com/GoogleChrome/workbox/issues/2158
-      config = validateWebpackGenerateSWOptions(this.config);
+      config = await validateWebpackGenerateSWOptions(this.config);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(

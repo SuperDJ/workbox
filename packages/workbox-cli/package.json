@@ -2,6 +2,7 @@
   "name": "workbox-cli",
   "version": "7.4.0",
   "description": "workbox-cli is the command line interface for Workbox.",
+  "type": "module",
   "keywords": [
     "workbox",
     "workboxjs",

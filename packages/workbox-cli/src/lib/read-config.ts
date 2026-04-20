@@ -10,8 +10,10 @@ import {GenerateSWOptions, InjectManifestOptions} from 'workbox-build';
 
 // A really light wrapper on top of Node's require() to make it easier to stub
 // out reading the configuration during tests.
-export function readConfig(
+export async function readConfig(
   configFile: string,
-): GenerateSWOptions | InjectManifestOptions {
-  return require(configFile) as GenerateSWOptions | InjectManifestOptions;
+): Promise<GenerateSWOptions | InjectManifestOptions> {
+  return (await import(configFile)) as
+    | GenerateSWOptions
+    | InjectManifestOptions;
 }

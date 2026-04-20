@@ -31,7 +31,7 @@ import {validateGetManifestOptions} from './lib/validate-options';
 export async function getManifest(
   config: GetManifestOptions,
 ): Promise<GetManifestResult> {
-  const options = validateGetManifestOptions(config);
+  const options = await validateGetManifestOptions(config);
 
   return await getFileManifestEntries(options);
 }

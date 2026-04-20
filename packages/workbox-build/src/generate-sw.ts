@@ -62,7 +62,7 @@ import {writeSWUsingDefaultTemplate} from './lib/write-sw-using-default-template
 export async function generateSW(
   config: GenerateSWOptions,
 ): Promise<BuildResult> {
-  const options = validateGenerateSWOptions(config);
+  const options = await validateGenerateSWOptions(config);
   let entriesResult;
 
   if (options.globDirectory) {

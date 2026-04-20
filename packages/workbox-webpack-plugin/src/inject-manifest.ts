@@ -27,7 +27,7 @@ const SingleEntryPlugin = webpack.EntryPlugin || webpack.SingleEntryPlugin;
 
 // webpack v4/v5 compatibility:
 // https://github.com/webpack/webpack/issues/11425#issuecomment-686607633
-const {RawSource} = webpack.sources || require('webpack-sources');
+const {RawSource} = webpack.sources || import('webpack-sources');
 
 /**
  * This class supports compiling a service worker file provided via `swSrc`,
@@ -219,7 +219,7 @@ class InjectManifest {
     parentCompiler: webpack.Compiler,
   ): Promise<void> {
     try {
-      this.config = validateWebpackInjectManifestOptions(this.config);
+      this.config = await validateWebpackInjectManifestOptions(this.config);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(

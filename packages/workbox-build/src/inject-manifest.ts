@@ -53,7 +53,7 @@ import {validateInjectManifestOptions} from './lib/validate-options';
 export async function injectManifest(
   config: InjectManifestOptions,
 ): Promise<BuildResult> {
-  const options = validateInjectManifestOptions(config);
+  const options = await validateInjectManifestOptions(config);
 
   // Make sure we leave swSrc and swDest out of the precache manifest.
   for (const file of [options.swSrc, options.swDest]) {
